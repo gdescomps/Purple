@@ -16,10 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+function deckAleatoire(){
+    //alert("test");
+    get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
+
+}
+function get(url) {
+    var request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    // .................................
+    request.onreadystatechange = function (aEvt) {
+        // .................................
+        if (request.readyState == 4) {
+            if (request.status == 200) {
+                onWebserviceSuccess(JSON.parse(request.responseText));
+            }
+            else {  // .................................
+                console.log("Error : " + request.responseText);
+            }
+        }
+    };
+    request.send(null);
+}
+
+function onWebserviceSuccess(response) {
+    var newP = document.createElement("p");
+    newP.appendChild(document.createTextNode("Deck : " + response.deck_id));
+    document.getElementById("content").appendChild(newP);
+}
+
 var app = {
     // Application Constructor
     initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+       document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+
     },
 
     // deviceready Event Handler
@@ -27,12 +57,13 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+        //this.receivedEvent('deviceready');
+        document.getElementById("bouton1").addEventListener("click", deckAleatoire );
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        /*var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
 
@@ -40,6 +71,7 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+        */
     }
 };
 
