@@ -16,22 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function deckAleatoire(){
-    //alert("test");
-    get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
+var deckId;
+var score=0;
 
+function deckAleatoire(){
+    url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
+    get(url, 'nouveauDeck');
+    afficherDeck(reponse);
 }
-function get(url) {
+
+function tirerCarte(){
+    url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
+    var reponse = get(url, 'tirerCarte');
+    afficherNouvelleCarte(reponse);
+}
+
+function get(url, action){
+    
     var request = new XMLHttpRequest();
     request.open("GET", url, true);
-    // .................................
+
+    // Lors d'un changement d'état de la requête
     request.onreadystatechange = function (aEvt) {
-        // .................................
+        // Si une réponse a été reçue
         if (request.readyState == 4) {
             if (request.status == 200) {
-                onWebserviceSuccess(JSON.parse(request.responseText));
+                switch(action){
+                    case 'nouveauDeck':
+                        afficherDeck(JSON.parse(request.responseText));
+                        break;
+                    case 'tirerCarte':
+                        afficherNouvelleCarte(JSON.parse(request.responseText));
+                        break;
+                }
             }
-            else {  // .................................
+            else {  // Sinon afficher l'erreur
                 console.log("Error : " + request.responseText);
             }
         }
@@ -39,11 +58,24 @@ function get(url) {
     request.send(null);
 }
 
-function onWebserviceSuccess(response) {
+function afficherDeck(response) {
     var newP = document.createElement("p");
-    newP.appendChild(document.createTextNode("Deck : " + response.deck_id));
+    deckId=response.deck_id;
+    newP.appendChild(document.createTextNode("Deck : " + deckId));
     document.getElementById("content").appendChild(newP);
 }
+
+function afficherNouvelleCarte(response){
+
+    var imagePrincipale=document.getElementById("cartePrincipale");
+    var imageSecondaire=document.getElementById("carteSecondaire");
+
+    imageSecondaire.setAttribute("src",imagePrincipale.src) ;
+    var nouvelleCarte=response["cards"]["0"]["images"]["png"];
+    imagePrincipale.setAttribute("src", nouvelleCarte);
+
+}
+
 
 var app = {
     // Application Constructor
@@ -59,6 +91,7 @@ var app = {
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
         document.getElementById("melanger").addEventListener("click", deckAleatoire );
+        document.getElementById("carte").addEventListener("click", tirerCarte );
     },
 
     // Update DOM on a Received Event
