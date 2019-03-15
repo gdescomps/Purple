@@ -58,10 +58,16 @@ function onWebserviceSuccess(response) {
     compteur++;
 }
 else{
-    var image=document.getElementById("image");
-    var src=response["cards"]["0"]["images"]["png"];
-    image.setAttribute("src",src);
-alert(response["cards"]["0"]["images"]["png"]);
+    var imagePrincipale=document.getElementById("imagePrincipale");
+    var imageSecondaire=document.getElementById("imageSecondaire");
+    imagePrincipale.setAttribute("src",imagePrincipale.src);
+
+  
+    imageSecondaire.setAttribute("src",imagePrincipale.src);
+
+    var newsrc=response["cards"]["0"]["images"]["png"];
+    imagePrincipale.setAttribute("src",newsrc);
+
 } 
 
 }
@@ -80,7 +86,7 @@ var app = {
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
         document.getElementById("melanger").addEventListener("click", deckAleatoire );
-        document.getElementById("image").addEventListener("click", carteAleatoire );
+        document.getElementById("imagePrincipale").addEventListener("click", carteAleatoire );
     },
 
     // Update DOM on a Received Event
