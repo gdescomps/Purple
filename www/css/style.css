@@ -1,0 +1,24 @@
+body {
+	background-color: #2e7d32;
+}
+
+.card{
+
+	background-color: #2e7d32;
+}
+
+.card-header{
+	background-color: #a5d6a7
+}
+
+.card-body{
+	background-color: #1b5e20
+}
+
+.card-body blockquote p {
+	color: #a5d6a7
+}
+
+.instructions p {
+	color : #a5d6a7;
+}

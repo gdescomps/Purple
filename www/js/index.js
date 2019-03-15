@@ -58,7 +58,7 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
-        document.getElementById("bouton1").addEventListener("click", deckAleatoire );
+        document.getElementById("melanger").addEventListener("click", deckAleatoire );
     },
 
     // Update DOM on a Received Event
