@@ -23,6 +23,8 @@ function deckAleatoire(){
     url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
     get(url, 'nouveauDeck');
     afficherDeck(reponse);
+    //majScore(0);
+    
 }
 
 function tirerCarte(){
@@ -63,10 +65,11 @@ function afficherDeck(response) {
     deckId=response.deck_id;
     newP.appendChild(document.createTextNode("Deck : " + deckId));
     document.getElementById("content").appendChild(newP);
+
+    majScore(0);
 }
 
 function afficherNouvelleCarte(response){
-
     var imagePrincipale=document.getElementById("cartePrincipale");
     var imageSecondaire=document.getElementById("carteSecondaire");
 
@@ -74,7 +77,15 @@ function afficherNouvelleCarte(response){
     var nouvelleCarte=response["cards"]["0"]["images"]["png"];
     imagePrincipale.setAttribute("src", nouvelleCarte);
 
+    majScore(score+1);
 }
+
+function majScore(val){
+    score=val;
+    document.getElementById("pScore").innerHTML=score;
+   
+}
+
 
 
 var app = {
@@ -91,7 +102,7 @@ var app = {
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
         document.getElementById("melanger").addEventListener("click", deckAleatoire );
-        document.getElementById("carte").addEventListener("click", tirerCarte );
+        document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
     },
 
     // Update DOM on a Received Event
