@@ -21,6 +21,14 @@ function deckAleatoire(){
     get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1");
 
 }
+
+function carteAleatoire(){
+    //alert("test");
+ 
+    get("https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1");
+
+}
+
 function get(url) {
     var request = new XMLHttpRequest();
     request.open("GET", url, true);
@@ -39,10 +47,23 @@ function get(url) {
     request.send(null);
 }
 
+var compteur=0;
+var deckId;
 function onWebserviceSuccess(response) {
+    if (compteur==0){
     var newP = document.createElement("p");
-    newP.appendChild(document.createTextNode("Deck : " + response.deck_id));
+    deckId=response.deck_id;
+    newP.appendChild(document.createTextNode("Deck : " + deckId));
     document.getElementById("content").appendChild(newP);
+    compteur++;
+}
+else{
+    var image=document.getElementById("image");
+    var src=response["cards"]["0"]["images"]["png"];
+    image.setAttribute("src",src);
+alert(response["cards"]["0"]["images"]["png"]);
+} 
+
 }
 
 var app = {
@@ -59,6 +80,7 @@ var app = {
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
         document.getElementById("melanger").addEventListener("click", deckAleatoire );
+        document.getElementById("image").addEventListener("click", carteAleatoire );
     },
 
     // Update DOM on a Received Event
