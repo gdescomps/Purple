@@ -18,6 +18,7 @@
  */
 var deckId;
 var score=0;
+var tableauValeur= ["2","3","4","5","6","7","8","9","0","J","Q","K","A"];
 
 function deckAleatoire(){
     url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
@@ -27,10 +28,45 @@ function deckAleatoire(){
     
 }
 
+function comparerValeurCarte(choix){
+
+tirerCarte();
+
+var comparaison="egalite";
+
+var srcImagePrincipale=document.getElementById("cartePrincipale").src;
+var srcImageSecondaire=document.getElementById("carteSecondaire").src;
+
+var valeurImagePrincipale= srcImagePrincipale[srcImagePrincipale.length-6];
+var valeurImageSecondaire= srcImageSecondaire[srcImageSecondaire.length-6];
+
+var valeurNumeriqueImagePrincipale=0;
+var valeurNumeriqueImageSecondaire=0;
+
+
+while(tableauValeur[valeurNumeriqueImagePrincipale]!==valeurImagePrincipale)
+{
+    valeurNumeriqueImagePrincipale++;
+}
+
+while(tableauValeur[valeurNumeriqueImageSecondaire]!==valeurImageSecondaire)
+{
+    valeurNumeriqueImageSecondaire++;
+}
+
+if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="plus";
+else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="moins";
+
+if (choix!=comparaison) deckAleatoire();
+
+
+}
+
 function tirerCarte(){
     url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
-    var reponse = get(url, 'tirerCarte');
-    afficherNouvelleCarte(reponse);
+    get(url, 'tirerCarte');
+    //var reponse = get(url, 'tirerCarte');
+   // afficherNouvelleCarte(reponse);
 }
 
 function get(url, action){
@@ -99,12 +135,13 @@ var app = {
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        //this.receivedEvent('deviceready');
-        document.getElementById("melanger").addEventListener("click", deckAleatoire );
-        document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
-    },
 
+onDeviceReady: function() {
+        //this.receivedEvent('deviceready');
+        document.getElementById("plus").addEventListener("click", function() {comparerValeurCarte("plus");}); 
+        document.getElementById("moins").addEventListener("click", function() {comparerValeurCarte("moins");});
+        document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
+},
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         /*var parentElement = document.getElementById(id);
