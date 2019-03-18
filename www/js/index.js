@@ -62,6 +62,24 @@ if (choix!=comparaison) deckAleatoire();
 
 }
 
+function rougeNoireOuPurple(choix){
+
+    tirerCarte();
+
+
+    if (choix=="purple"){}
+
+    else {
+        var srcImagePrincipale=document.getElementById("cartePrincipale").src;
+        var couleurImagePrincipale= srcImagePrincipale[srcImagePrincipale.length-5];
+       
+        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+        else {couleurImagePrincipale="noire";}
+
+        if (choix!=couleurImagePrincipale) deckAleatoire();
+    }
+}
+
 function tirerCarte(){
     url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
     get(url, 'tirerCarte');
@@ -140,6 +158,9 @@ onDeviceReady: function() {
         //this.receivedEvent('deviceready');
         document.getElementById("plus").addEventListener("click", function() {comparerValeurCarte("plus");}); 
         document.getElementById("moins").addEventListener("click", function() {comparerValeurCarte("moins");});
+
+        document.getElementById("rouge").addEventListener("click", function() {rougeNoireOuPurple("rouge");}); 
+        document.getElementById("noire").addEventListener("click", function() {rougeNoireOuPurple("noire");});
         document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 },
     // Update DOM on a Received Event
