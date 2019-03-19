@@ -20,6 +20,11 @@ var deckId;
 var score=0;
 var tableauValeur= ["2","3","4","5","6","7","8","9","0","J","Q","K","A"];
 
+var cartePrincipale="KH";
+var carteSecondaire="AH";
+
+var choix;
+
 function deckAleatoire(){
     url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
     get(url, 'nouveauDeck');
@@ -28,37 +33,54 @@ function deckAleatoire(){
     
 }
 
-function comparerValeurCarte(choix){
+function traiterChoixJoueurEtTirerUneCarte(choixJoueur){
 
-tirerCarte();
+    choix=choixJoueur;
+    tirerCarte();
+}
 
+function comparerValeurCartes(){
+
+
+if(choix=="plus"||choix=="moins"){
 var comparaison="egalite";
 
-var srcImagePrincipale=document.getElementById("cartePrincipale").src;
-var srcImageSecondaire=document.getElementById("carteSecondaire").src;
-
-var valeurImagePrincipale= srcImagePrincipale[srcImagePrincipale.length-6];
-var valeurImageSecondaire= srcImageSecondaire[srcImageSecondaire.length-6];
-
+var valeurImageSecondaire= carteSecondaire[0];
+var valeurImagePrincipale= cartePrincipale[0];
 var valeurNumeriqueImagePrincipale=0;
 var valeurNumeriqueImageSecondaire=0;
-
-
-while(tableauValeur[valeurNumeriqueImagePrincipale]!==valeurImagePrincipale)
-{
-    valeurNumeriqueImagePrincipale++;
-}
 
 while(tableauValeur[valeurNumeriqueImageSecondaire]!==valeurImageSecondaire)
 {
     valeurNumeriqueImageSecondaire++;
 }
 
-if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="plus";
-else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="moins";
+while(tableauValeur[valeurNumeriqueImagePrincipale]!==cartePrincipale[0])
+{
+    valeurNumeriqueImagePrincipale++;
+}
+
+
+
+if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="moins";
+else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="plus";
 
 if (choix!=comparaison) deckAleatoire();
 
+}
+else if (choix=="rouge"||choix=="noire"){
+
+        var couleurImagePrincipale= cartePrincipale[1];
+       
+        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+        else {couleurImagePrincipale="noire";}
+
+        if (choix!=couleurImagePrincipale) deckAleatoire();
+}
+else 
+{
+
+}
 
 }
 
@@ -124,6 +146,8 @@ function afficherDeck(response) {
 }
 
 function afficherNouvelleCarte(response){
+    carteSecondaire=cartePrincipale;
+    cartePrincipale=response["cards"]["0"]["code"];
     var imagePrincipale=document.getElementById("cartePrincipale");
     var imageSecondaire=document.getElementById("carteSecondaire");
 
@@ -131,7 +155,9 @@ function afficherNouvelleCarte(response){
     var nouvelleCarte=response["cards"]["0"]["images"]["png"];
     imagePrincipale.setAttribute("src", nouvelleCarte);
 
+
     majScore(score+1);
+    comparerValeurCartes();
 }
 
 function majScore(val){
@@ -156,11 +182,11 @@ var app = {
 
 onDeviceReady: function() {
         //this.receivedEvent('deviceready');
-        document.getElementById("plus").addEventListener("click", function() {comparerValeurCarte("plus");}); 
-        document.getElementById("moins").addEventListener("click", function() {comparerValeurCarte("moins");});
+        document.getElementById("plus").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("plus");}); 
+        document.getElementById("moins").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("moins");});
 
-        document.getElementById("rouge").addEventListener("click", function() {rougeNoireOuPurple("rouge");}); 
-        document.getElementById("noire").addEventListener("click", function() {rougeNoireOuPurple("noire");});
+        document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("rouge");}); 
+        document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("noire");});
         document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 },
     // Update DOM on a Received Event
