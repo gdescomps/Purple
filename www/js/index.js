@@ -23,6 +23,8 @@ var tableauValeur= ["2","3","4","5","6","7","8","9","0","J","Q","K","A"];
 var cartePrincipale="KH";
 var carteSecondaire="AH";
 
+var deuxCartesTires=1;
+
 var choix;
 
 function deckAleatoire(){
@@ -79,7 +81,26 @@ else if (choix=="rouge"||choix=="noire"){
 }
 else 
 {
+    if(deuxCartesTires==2){
 
+        var couleurImagePrincipale= cartePrincipale[1];
+        var couleurImageSecondaire= carteSecondaire[1];
+
+        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+        else {couleurImagePrincipale="noire";}
+
+        if (couleurImageSecondaire=="H"||couleurImageSecondaire=="D"){couleurImageSecondaire="rouge";}
+        else {couleurImageSecondaire="noire";}
+
+        if (couleurImagePrincipale=="noire"&&couleurImageSecondaire=="noire") deckAleatoire();
+        else if (couleurImagePrincipale=="rouge"&&couleurImageSecondaire=="rouge") deckAleatoire();
+
+        deuxCartesTires=1;
+    }
+    else {
+        tirerCarte();
+        deuxCartesTires++;
+    }
 }
 
 }
@@ -137,10 +158,10 @@ function get(url, action){
 }
 
 function afficherDeck(response) {
-    var newP = document.createElement("p");
+    
     deckId=response.deck_id;
-    newP.appendChild(document.createTextNode("Deck : " + deckId));
-    document.getElementById("content").appendChild(newP);
+
+    document.getElementById("content").innerHTML="Gorgées à boire : " + score;
 
     majScore(0);
 }
@@ -187,6 +208,7 @@ onDeviceReady: function() {
 
         document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("rouge");}); 
         document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("noire");});
+        document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("purple");});
         document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 },
     // Update DOM on a Received Event
