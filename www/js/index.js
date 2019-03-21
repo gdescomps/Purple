@@ -69,7 +69,9 @@ function comparerValeurCartes(){
         else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="plus";
 
         if (choix!=comparaison){
-            document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+            document.getElementById("cartePerduSecondaire").setAttribute("src",document.getElementById("carteSecondaire").src);
+            document.getElementById("cartePerduPrincipale").setAttribute("src",document.getElementById("cartePrincipale").src);
+            
             deckAleatoire();
         }
     }
@@ -82,7 +84,9 @@ function comparerValeurCartes(){
             else {couleurImagePrincipale="noire";}
 
             if (choix!=couleurImagePrincipale){
-                document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+                document.getElementById("cartePerduSecondaire").setAttribute("src",document.getElementById("carteSecondaire").src);
+                document.getElementById("cartePerduPrincipale").setAttribute("src",document.getElementById("cartePrincipale").src);
+
                 deckAleatoire();
             }
     }
