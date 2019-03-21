@@ -36,13 +36,9 @@ function deckAleatoire(){
     url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
     get(url, 'nouveauDeck');
     afficherDeck(reponse);
-    
-
-    //majScore(0);
-    
 }
 
-function traiterChoixJoueurEtTirerUneCarte(choixJoueur){
+function traiterChoixJoueur(choixJoueur){
     console.log('Choix '+choixJoueur);
     choix=choixJoueur;
     tirerCarte();
@@ -54,8 +50,8 @@ function comparerValeurCartes(){
     if(choix=="plus"||choix=="moins"){
         var comparaison="egalite";
 
-        var valeurImageSecondaire= carteSecondaire[0];
-        var valeurImagePrincipale= cartePrincipale[0];
+        var valeurImageSecondaire=carteSecondaire[0];
+        var valeurImagePrincipale=cartePrincipale[0];
         var valeurNumeriqueImagePrincipale=0;
         var valeurNumeriqueImageSecondaire=0;
 
@@ -68,8 +64,6 @@ function comparerValeurCartes(){
         {
             valeurNumeriqueImagePrincipale++;
         }
-
-
 
         if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="moins";
         else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="plus";
@@ -94,38 +88,37 @@ function comparerValeurCartes(){
     }
     else if (choix=="purple")
     {
-        if(deuxCartesTires==2){
+       
+        var couleurImagePrincipale= cartePrincipale[1];
+        var couleurImageSecondaire= carteSecondaire[1];
 
-            var couleurImagePrincipale= cartePrincipale[1];
-            var couleurImageSecondaire= carteSecondaire[1];
+        console.log(choix+' '+carteSecondaire+' '+cartePrincipale);
+        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+        else {couleurImagePrincipale="noire";}
 
-            if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
-            else {couleurImagePrincipale="noire";}
+        if (couleurImageSecondaire=="H"||couleurImageSecondaire=="D"){couleurImageSecondaire="rouge";}
+        else {couleurImageSecondaire="noire";}
 
-            if (couleurImageSecondaire=="H"||couleurImageSecondaire=="D"){couleurImageSecondaire="rouge";}
-            else {couleurImageSecondaire="noire";}
-
-            if (couleurImagePrincipale==couleurImageSecondaire){
-                document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
-                deckAleatoire();
-            }
-            
-
-            deuxCartesTires=1;
+        if (couleurImagePrincipale==couleurImageSecondaire){
+            document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+            deckAleatoire();
         }
-        else {
-            tirerCarte();
-            deuxCartesTires++;
-        }
+
     }
 
 }
 
 function tirerCarte(){
-    url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
+    
+    if (choix=="purple"){
+        url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=2";
+    }
+
+    else{
+        url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
+    }
+
     get(url, 'tirerCarte');
-    //var reponse = get(url, 'tirerCarte');
-   // afficherNouvelleCarte(reponse);
 }
 
 function get(url, action){
@@ -171,17 +164,33 @@ function afficherDeck(response) {
 }
 
 function afficherNouvelleCarte(response){
-    carteSecondaire=cartePrincipale;
-    cartePrincipale=response["cards"]["0"]["code"];
-    console.log('secondaire :'+carteSecondaire+' principale :'+cartePrincipale);
+    
+    if(choix=="purple"){
+        carteSecondaire=response["cards"]["0"]["code"];
+        cartePrincipale=response["cards"]["1"]["code"];
+        console.log('secondaire :'+carteSecondaire+' principale :'+cartePrincipale);
 
-    var imagePrincipale=document.getElementById("cartePrincipale");
-    var imageSecondaire=document.getElementById("carteSecondaire");
+        var imagePrincipale=document.getElementById("cartePrincipale");
+        var imageSecondaire=document.getElementById("carteSecondaire");
 
-    imageSecondaire.setAttribute("src",imagePrincipale.src) ;
-    var nouvelleCarte=response["cards"]["0"]["images"]["png"];
-    imagePrincipale.setAttribute("src", nouvelleCarte);
+        var srcSecondaire=response["cards"]["0"]["images"]["png"];
+        imageSecondaire.setAttribute("src",srcSecondaire) ;
+        var srcPrincipale=response["cards"]["1"]["images"]["png"];
+        imagePrincipale.setAttribute("src", srcPrincipale);
+    }
 
+    else{
+        carteSecondaire=cartePrincipale;
+        cartePrincipale=response["cards"]["0"]["code"];
+        console.log('secondaire :'+carteSecondaire+' principale :'+cartePrincipale);
+
+        var imagePrincipale=document.getElementById("cartePrincipale");
+        var imageSecondaire=document.getElementById("carteSecondaire");
+
+        imageSecondaire.setAttribute("src",imagePrincipale.src) ;
+        var nouvelleCarte=response["cards"]["0"]["images"]["png"];
+        imagePrincipale.setAttribute("src", nouvelleCarte);
+    }
 
     majScore(score+1);
     comparerValeurCartes();
@@ -209,12 +218,12 @@ var app = {
 
 onDeviceReady: function() {
         //this.receivedEvent('deviceready');
-        document.getElementById("plus").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("plus");}); 
-        document.getElementById("moins").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("moins");});
+        document.getElementById("plus").addEventListener("click", function() {traiterChoixJoueur("plus");}); 
+        document.getElementById("moins").addEventListener("click", function() {traiterChoixJoueur("moins");});
 
-        document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("rouge");}); 
-        document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("noire");});
-        document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("purple");});
+        document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueur("rouge");}); 
+        document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueur("noire");});
+        document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueur("purple");});
         document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 },
     // Update DOM on a Received Event
