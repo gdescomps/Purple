@@ -100,7 +100,10 @@ function comparerValeurCartes(){
         else {couleurImageSecondaire="noire";}
 
         if (couleurImagePrincipale==couleurImageSecondaire){
-            document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+            
+            document.getElementById("cartePerduSecondaire").setAttribute("src",document.getElementById("carteSecondaire").src);
+            document.getElementById("cartePerduPrincipale").setAttribute("src",document.getElementById("cartePrincipale").src);
+
             deckAleatoire();
         }
 
@@ -224,7 +227,7 @@ onDeviceReady: function() {
         document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueur("rouge");}); 
         document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueur("noire");});
         document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueur("purple");});
-        document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
+        //document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
