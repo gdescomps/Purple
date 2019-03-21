@@ -59,19 +59,49 @@
                                   </div>
                                   <div class="card-body p-2">
                                     <blockquote class="blockquote mb-0">
-                                      <p id="pScore" class="text-center">0</p>
+
+                                      <p id="pScore" class="text-center mb-1">0</p>
+
                                     </blockquote>
                                   </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 p-1">
+                                        <img id="cartePerduSecondaire" src="img/carteDos.png" class="img-fluid">
+                                    </div>
+                                    <div class="col-6 p-1">
+                                        <img id="cartePerduPrincipale" src="img/carteDos.png" class="img-fluid">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-8">
                                 <img id="cartePrincipale" src="img/carteDos.png" class="img-fluid">
                             </div>
                         </div>
+                        <div class="row mt-4 ">
+                            <div class="col-6  text-center instructions">
+                                <button class="btn btn-primary btn-block btn btn-dark" id="plus" type="button" class="btn btn-dark">+</button>
+                            </div>  
+                            <div class="col-6 text-center instructions">
+                                <button class="btn btn-primary btn-block btn btn-dark" id="moins" type="button" class="btn btn-dark">-</button>        
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-6 text-center instructions">
+                                <button id="rouge" type="button" class="btn btn-primary btn-block bt btn btn-danger">Rouge</button>
+                            </div>
+                            <div class="col-6 text-center instructions">
+                                <button id="noire" type="button" class="btn btn-primary btn-block bt btn btn-dark">Noire</button>
+                            </div>               
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-6 offset-3  text-center instructions">
+                                <button id="purple" type="button" class="btn btn-primary btn-purple btn-block btn btn-dark">Purple</button>
+
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12 mt-2 text-center instructions">
-                                <p>Cliquez sur la carte pour en tirer une autre</p>
-                                <button id="melanger" type="button" class="btn btn-danger">Mélanger le paquet</button>
                                 <p id="content"></p>
                             </div>
                         </div>

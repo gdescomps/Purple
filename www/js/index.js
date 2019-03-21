@@ -18,19 +18,114 @@
  */
 var deckId;
 var score=0;
+var tableauValeur= ["2","3","4","5","6","7","8","9","0","J","Q","K","A"];
+
+var cartePrincipale="KH";
+var carteSecondaire="AH";
+
+var deuxCartesTires=1;
+
+var choix;
 
 function deckAleatoire(){
+    console.log('Nouveau Deck');
+    choix="perdu";
+    var imagePrincipale=document.getElementById("cartePrincipale");
+
+    imagePrincipale.setAttribute("src","img/carteDos.png") ;
     url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
     get(url, 'nouveauDeck');
     afficherDeck(reponse);
-    //majScore(0);
-    
+}
+
+function traiterChoixJoueur(choixJoueur){
+    console.log('Choix '+choixJoueur);
+    choix=choixJoueur;
+    tirerCarte();
+}
+
+function comparerValeurCartes(){
+
+
+    if(choix=="plus"||choix=="moins"){
+        var comparaison="egalite";
+
+        var valeurImageSecondaire=carteSecondaire[0];
+        var valeurImagePrincipale=cartePrincipale[0];
+        var valeurNumeriqueImagePrincipale=0;
+        var valeurNumeriqueImageSecondaire=0;
+
+        while(tableauValeur[valeurNumeriqueImageSecondaire]!==valeurImageSecondaire)
+        {
+            valeurNumeriqueImageSecondaire++;
+        }
+
+        while(tableauValeur[valeurNumeriqueImagePrincipale]!==cartePrincipale[0])
+        {
+            valeurNumeriqueImagePrincipale++;
+        }
+
+        if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="moins";
+        else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="plus";
+
+        if (choix!=comparaison){
+            document.getElementById("cartePerduSecondaire").setAttribute("src",document.getElementById("carteSecondaire").src);
+            document.getElementById("cartePerduPrincipale").setAttribute("src",document.getElementById("cartePrincipale").src);
+            
+            deckAleatoire();
+        }
+    }
+
+    else if (choix=="rouge"||choix=="noire"){
+
+            var couleurImagePrincipale= cartePrincipale[1];
+           
+            if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+            else {couleurImagePrincipale="noire";}
+
+            if (choix!=couleurImagePrincipale){
+                document.getElementById("cartePerduSecondaire").setAttribute("src",document.getElementById("carteSecondaire").src);
+                document.getElementById("cartePerduPrincipale").setAttribute("src",document.getElementById("cartePrincipale").src);
+
+                deckAleatoire();
+            }
+    }
+    else if (choix=="purple")
+    {
+       
+        var couleurImagePrincipale= cartePrincipale[1];
+        var couleurImageSecondaire= carteSecondaire[1];
+
+        console.log(choix+' '+carteSecondaire+' '+cartePrincipale);
+        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+        else {couleurImagePrincipale="noire";}
+
+        if (couleurImageSecondaire=="H"||couleurImageSecondaire=="D"){couleurImageSecondaire="rouge";}
+        else {couleurImageSecondaire="noire";}
+
+        if (couleurImagePrincipale==couleurImageSecondaire){
+            
+            document.getElementById("cartePerduSecondaire").setAttribute("src",document.getElementById("carteSecondaire").src);
+            document.getElementById("cartePerduPrincipale").setAttribute("src",document.getElementById("cartePrincipale").src);
+
+            deckAleatoire();
+        }
+
+    }
+
 }
 
 function tirerCarte(){
-    url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
-    var reponse = get(url, 'tirerCarte');
-    afficherNouvelleCarte(reponse);
+    
+    if (choix=="purple"){
+        url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=2";
+    }
+
+    else{
+        url="https://deckofcardsapi.com/api/deck/"+deckId+"/draw/?count=1";
+    }
+
+    get(url, 'tirerCarte');
 }
 
 function get(url, action){
@@ -61,8 +156,10 @@ function get(url, action){
 }
 
 function afficherDeck(response) {
-    var newP = document.createElement("p");
+    
     deckId=response.deck_id;
+
+    document.getElementById("content").innerHTML="Score précédent : " + score;
 
     var imagePrincipale=document.getElementById("cartePrincipale");
     var imageSecondaire=document.getElementById("carteSecondaire");
@@ -71,17 +168,45 @@ function afficherDeck(response) {
     imagePrincipale.setAttribute("src","img/carteDos.png") ;
     
     majScore(0);
+
+    tirerCarte();
+
+    var imageSecondaire=document.getElementById("carteSecondaire");
+
+    imageSecondaire.setAttribute("src","img/carteDos.png") ;
 }
 
 function afficherNouvelleCarte(response){
-    var imagePrincipale=document.getElementById("cartePrincipale");
-    var imageSecondaire=document.getElementById("carteSecondaire");
+    
+    if(choix=="purple"){
+        carteSecondaire=response["cards"]["0"]["code"];
+        cartePrincipale=response["cards"]["1"]["code"];
+        console.log('secondaire :'+carteSecondaire+' principale :'+cartePrincipale);
 
-    imageSecondaire.setAttribute("src",imagePrincipale.src) ;
-    var nouvelleCarte=response["cards"]["0"]["images"]["png"];
-    imagePrincipale.setAttribute("src", nouvelleCarte);
+        var imagePrincipale=document.getElementById("cartePrincipale");
+        var imageSecondaire=document.getElementById("carteSecondaire");
+
+        var srcSecondaire=response["cards"]["0"]["images"]["png"];
+        imageSecondaire.setAttribute("src",srcSecondaire) ;
+        var srcPrincipale=response["cards"]["1"]["images"]["png"];
+        imagePrincipale.setAttribute("src", srcPrincipale);
+    }
+
+    else{
+        carteSecondaire=cartePrincipale;
+        cartePrincipale=response["cards"]["0"]["code"];
+        console.log('secondaire :'+carteSecondaire+' principale :'+cartePrincipale);
+
+        var imagePrincipale=document.getElementById("cartePrincipale");
+        var imageSecondaire=document.getElementById("carteSecondaire");
+
+        imageSecondaire.setAttribute("src",imagePrincipale.src) ;
+        var nouvelleCarte=response["cards"]["0"]["images"]["png"];
+        imagePrincipale.setAttribute("src", nouvelleCarte);
+    }
 
     majScore(score+1);
+    comparerValeurCartes();
 }
 
 function majScore(val){
@@ -89,7 +214,14 @@ function majScore(val){
     document.getElementById("pScore").innerHTML=score;
    
 }
-
+function onBackKeyDown()
+{
+    if (confirm("Voulez-vous quitter l'application ?")) 
+    {
+        // Code à éxécuter si le l'utilisateur clique sur "OK"
+        navigator.app.exitApp() ;
+    }
+}
 
 
 var app = {
@@ -103,12 +235,20 @@ var app = {
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        //this.receivedEvent('deviceready');
-        document.getElementById("melanger").addEventListener("click", deckAleatoire );
-        document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
-    },
 
+onDeviceReady: function() {
+        //this.receivedEvent('deviceready');
+        document.getElementById("plus").addEventListener("click", function() {traiterChoixJoueur("plus");}); 
+        document.getElementById("moins").addEventListener("click", function() {traiterChoixJoueur("moins");});
+
+        document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueur("rouge");}); 
+        document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueur("noire");});
+        document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueur("purple");});
+        
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        //document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
+
+},
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         /*var parentElement = document.getElementById(id);
