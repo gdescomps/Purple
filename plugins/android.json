@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "groupe9.purple.jeudecartes"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "groupe9.purple.jeudecartes"
     }
   },
   "dependent_plugins": {}

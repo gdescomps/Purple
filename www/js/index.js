@@ -27,6 +27,7 @@ var deuxCartesTires=1;
 
 var choix;
 
+
 function deckAleatoire(){
     console.log('Nouveau Deck');
     choix="perdu";
@@ -246,6 +247,11 @@ onDeviceReady: function() {
         document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueur("purple");});
         
         document.addEventListener("backbutton", onBackKeyDown, false);
+        
+        document.addEventListener("offline", function(e){
+                            alert("Veuillez vous connecter à internet");
+
+        }, false);  
         //document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 
 },
