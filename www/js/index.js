@@ -28,9 +28,15 @@ var deuxCartesTires=1;
 var choix;
 
 function deckAleatoire(){
+    choix="perdu";
+    var imagePrincipale=document.getElementById("cartePrincipale");
+
+    imagePrincipale.setAttribute("src","img/carteDos.png") ;
     url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1";
     get(url, 'nouveauDeck');
     afficherDeck(reponse);
+    
+
     //majScore(0);
     
 }
@@ -79,7 +85,7 @@ else if (choix=="rouge"||choix=="noire"){
 
         if (choix!=couleurImagePrincipale) deckAleatoire();
 }
-else 
+else if (choix=="purple")
 {
     if(deuxCartesTires==2){
 
@@ -103,24 +109,6 @@ else
     }
 }
 
-}
-
-function rougeNoireOuPurple(choix){
-
-    tirerCarte();
-
-
-    if (choix=="purple"){}
-
-    else {
-        var srcImagePrincipale=document.getElementById("cartePrincipale").src;
-        var couleurImagePrincipale= srcImagePrincipale[srcImagePrincipale.length-5];
-       
-        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
-        else {couleurImagePrincipale="noire";}
-
-        if (choix!=couleurImagePrincipale) deckAleatoire();
-    }
 }
 
 function tirerCarte(){
@@ -164,6 +152,12 @@ function afficherDeck(response) {
     document.getElementById("content").innerHTML="Gorgées à boire : " + score;
 
     majScore(0);
+
+    tirerCarte();
+
+    var imageSecondaire=document.getElementById("carteSecondaire");
+
+    imageSecondaire.setAttribute("src","img/carteDos.png") ;
 }
 
 function afficherNouvelleCarte(response){
