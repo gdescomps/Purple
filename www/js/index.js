@@ -161,7 +161,7 @@ function afficherDeck(response) {
     
     deckId=response.deck_id;
 
-    document.getElementById("content").innerHTML="Gorgées à boire : " + score;
+    document.getElementById("content").innerHTML="Score précédent : " + score;
 
     majScore(0);
 }
