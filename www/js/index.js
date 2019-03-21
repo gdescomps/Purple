@@ -28,6 +28,7 @@ var deuxCartesTires=1;
 var choix;
 
 function deckAleatoire(){
+    console.log('Nouveau Deck');
     choix="perdu";
     var imagePrincipale=document.getElementById("cartePrincipale");
 
@@ -42,7 +43,7 @@ function deckAleatoire(){
 }
 
 function traiterChoixJoueurEtTirerUneCarte(choixJoueur){
-
+    console.log('Choix '+choixJoueur);
     choix=choixJoueur;
     tirerCarte();
 }
@@ -50,64 +51,73 @@ function traiterChoixJoueurEtTirerUneCarte(choixJoueur){
 function comparerValeurCartes(){
 
 
-if(choix=="plus"||choix=="moins"){
-var comparaison="egalite";
+    if(choix=="plus"||choix=="moins"){
+        var comparaison="egalite";
 
-var valeurImageSecondaire= carteSecondaire[0];
-var valeurImagePrincipale= cartePrincipale[0];
-var valeurNumeriqueImagePrincipale=0;
-var valeurNumeriqueImageSecondaire=0;
+        var valeurImageSecondaire= carteSecondaire[0];
+        var valeurImagePrincipale= cartePrincipale[0];
+        var valeurNumeriqueImagePrincipale=0;
+        var valeurNumeriqueImageSecondaire=0;
 
-while(tableauValeur[valeurNumeriqueImageSecondaire]!==valeurImageSecondaire)
-{
-    valeurNumeriqueImageSecondaire++;
-}
+        while(tableauValeur[valeurNumeriqueImageSecondaire]!==valeurImageSecondaire)
+        {
+            valeurNumeriqueImageSecondaire++;
+        }
 
-while(tableauValeur[valeurNumeriqueImagePrincipale]!==cartePrincipale[0])
-{
-    valeurNumeriqueImagePrincipale++;
-}
+        while(tableauValeur[valeurNumeriqueImagePrincipale]!==cartePrincipale[0])
+        {
+            valeurNumeriqueImagePrincipale++;
+        }
 
 
 
-if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="moins";
-else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="plus";
+        if (valeurNumeriqueImageSecondaire>valeurNumeriqueImagePrincipale) comparaison="moins";
+        else if (valeurNumeriqueImageSecondaire<valeurNumeriqueImagePrincipale) comparaison="plus";
 
-if (choix!=comparaison) deckAleatoire();
-
-}
-else if (choix=="rouge"||choix=="noire"){
-
-        var couleurImagePrincipale= cartePrincipale[1];
-       
-        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
-        else {couleurImagePrincipale="noire";}
-
-        if (choix!=couleurImagePrincipale) deckAleatoire();
-}
-else if (choix=="purple")
-{
-    if(deuxCartesTires==2){
-
-        var couleurImagePrincipale= cartePrincipale[1];
-        var couleurImageSecondaire= carteSecondaire[1];
-
-        if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
-        else {couleurImagePrincipale="noire";}
-
-        if (couleurImageSecondaire=="H"||couleurImageSecondaire=="D"){couleurImageSecondaire="rouge";}
-        else {couleurImageSecondaire="noire";}
-
-        if (couleurImagePrincipale=="noire"&&couleurImageSecondaire=="noire") deckAleatoire();
-        else if (couleurImagePrincipale=="rouge"&&couleurImageSecondaire=="rouge") deckAleatoire();
-
-        deuxCartesTires=1;
+        if (choix!=comparaison){
+            document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+            deckAleatoire();
+        }
     }
-    else {
-        tirerCarte();
-        deuxCartesTires++;
+
+    else if (choix=="rouge"||choix=="noire"){
+
+            var couleurImagePrincipale= cartePrincipale[1];
+           
+            if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+            else {couleurImagePrincipale="noire";}
+
+            if (choix!=couleurImagePrincipale){
+                document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+                deckAleatoire();
+            }
     }
-}
+    else if (choix=="purple")
+    {
+        if(deuxCartesTires==2){
+
+            var couleurImagePrincipale= cartePrincipale[1];
+            var couleurImageSecondaire= carteSecondaire[1];
+
+            if (couleurImagePrincipale=="H"||couleurImagePrincipale=="D"){couleurImagePrincipale="rouge";}
+            else {couleurImagePrincipale="noire";}
+
+            if (couleurImageSecondaire=="H"||couleurImageSecondaire=="D"){couleurImageSecondaire="rouge";}
+            else {couleurImageSecondaire="noire";}
+
+            if (couleurImagePrincipale==couleurImageSecondaire){
+                document.getElementById("perdu").innerHTML=carteSecondaire+" "+cartePrincipale;
+                deckAleatoire();
+            }
+            
+
+            deuxCartesTires=1;
+        }
+        else {
+            tirerCarte();
+            deuxCartesTires++;
+        }
+    }
 
 }
 
@@ -163,6 +173,8 @@ function afficherDeck(response) {
 function afficherNouvelleCarte(response){
     carteSecondaire=cartePrincipale;
     cartePrincipale=response["cards"]["0"]["code"];
+    console.log('secondaire :'+carteSecondaire+' principale :'+cartePrincipale);
+
     var imagePrincipale=document.getElementById("cartePrincipale");
     var imageSecondaire=document.getElementById("carteSecondaire");
 
