@@ -180,7 +180,14 @@ function majScore(val){
     document.getElementById("pScore").innerHTML=score;
    
 }
-
+function onBackKeyDown()
+{
+    if (confirm("Voulez-vous quitter l'application ?")) 
+    {
+        // Code à éxécuter si le l'utilisateur clique sur "OK"
+        navigator.app.exitApp() ;
+    }
+}
 
 
 var app = {
@@ -203,6 +210,7 @@ onDeviceReady: function() {
         document.getElementById("rouge").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("rouge");}); 
         document.getElementById("noire").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("noire");});
         document.getElementById("purple").addEventListener("click", function() {traiterChoixJoueurEtTirerUneCarte("purple");});
+        document.addEventListener("backbutton", onBackKeyDown, false);
         document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 },
     // Update DOM on a Received Event
