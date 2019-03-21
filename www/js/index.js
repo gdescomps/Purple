@@ -63,9 +63,13 @@ function get(url, action){
 function afficherDeck(response) {
     var newP = document.createElement("p");
     deckId=response.deck_id;
-    newP.appendChild(document.createTextNode("Deck : " + deckId));
-    document.getElementById("content").appendChild(newP);
 
+    var imagePrincipale=document.getElementById("cartePrincipale");
+    var imageSecondaire=document.getElementById("carteSecondaire");
+
+    imageSecondaire.setAttribute("src","img/carteDos.png") ;
+    imagePrincipale.setAttribute("src","img/carteDos.png") ;
+    
     majScore(0);
 }
 
