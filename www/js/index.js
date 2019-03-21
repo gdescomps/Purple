@@ -251,6 +251,8 @@ onDeviceReady: function() {
         document.addEventListener("offline", function(e){
                             alert("Veuillez vous connecter à internet");
 
+        document.addEventListener("online", deckAleatoire, false);
+
         }, false);  
         //document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 
