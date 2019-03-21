@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="groupe9.purple.jeudecartes" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>purple</name>
+    <name>Purple</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -8,6 +8,8 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
+    <preference name="orientation" value="portrait" />
+    <icon density="mdpi" height="57" platform="ios" src="KH.png" width="57" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
