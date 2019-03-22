@@ -191,6 +191,8 @@ function afficherNouvelleCarte(response){
         imageSecondaire.setAttribute("src",srcSecondaire) ;
         var srcPrincipale=response["cards"]["1"]["images"]["png"];
         imagePrincipale.setAttribute("src", srcPrincipale);
+
+        majScore(score+2);
     }
 
     else{
@@ -204,9 +206,11 @@ function afficherNouvelleCarte(response){
         imageSecondaire.setAttribute("src",imagePrincipale.src) ;
         var nouvelleCarte=response["cards"]["0"]["images"]["png"];
         imagePrincipale.setAttribute("src", nouvelleCarte);
+
+        majScore(score+1);
     }
 
-    majScore(score+1);
+    
     comparerValeurCartes();
 }
 
