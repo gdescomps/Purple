@@ -27,7 +27,11 @@ var deuxCartesTires=1;
 
 var choix;
 
-
+/**
+* Génération d'un deck aléatoire
+* Requete vers l'api deckofcardapi.com qui retourne un id de deck contenant 54 cartes dans un ordre aléatoire
+* L'id du deck retourné est réutilisé à chaque tirage de carte
+*/
 function deckAleatoire(){
     console.log('Nouveau Deck');
     choix="perdu";
@@ -39,12 +43,24 @@ function deckAleatoire(){
     afficherDeck(reponse);
 }
 
+/**
+* Mémoriser le choix du joueur dans une variable globale et tirer une carte
+*/
 function traiterChoixJoueur(choixJoueur){
     console.log('Choix '+choixJoueur);
     choix=choixJoueur;
     tirerCarte();
 }
 
+/**
+* Comparer la ou les deux dernière(s) carte(s) en fonction du choix du joueur
+* Les choix sont : plus, moins, rouge, noire, purple
+* Plus ou moins : la valeur de la dernière carte tirée est comparée à la précédente
+* Rouge ou noire : La couleur de la dernière carte tirée est vérifiée
+* Purple : Les deux dernières cartes doivent être de couleur différente (rouge et noire ou l'inverse)
+* En cas de réussite la partie continue
+* En cas d'échec, un nouveau deck est généré et les deux dernières cartes de la partie perdue sont affichées
+*/
 function comparerValeurCartes(){
 
 
@@ -93,7 +109,7 @@ function comparerValeurCartes(){
     }
     else if (choix=="purple")
     {
-       
+        
         var couleurImagePrincipale= cartePrincipale[1];
         var couleurImageSecondaire= carteSecondaire[1];
 
@@ -116,6 +132,10 @@ function comparerValeurCartes(){
 
 }
 
+/**
+* Tirer une ou deux carte(s) avec l'api deckofcardsapi.com, l'id du deck généré précedemment est réutilisé
+* Dans le cas d'un purple, deux cartes dont tirées en un appel pour limiter la charge sur l'api
+*/
 function tirerCarte(){
     
     if (choix=="purple"){
@@ -129,6 +149,10 @@ function tirerCarte(){
     get(url, 'tirerCarte');
 }
 
+/**
+* Effectue l'appel à l'api deckofcardsapi.com en REST avec l'url entrée en paramètre
+* Lors de la réception de la réponse, affiche en fonction de l'action désirée
+*/
 function get(url, action){
     
     var request = new XMLHttpRequest();
@@ -156,6 +180,15 @@ function get(url, action){
     request.send(null);
 }
 
+/**
+* Paramètre:
+*   response : réponse de l'api deckofcardsapi.com
+*
+* Met à jour le deckId avec la réponse de l'api deckofcardsapi.com
+* Affiche le dos de carte sur les cartes
+* tire la première carte
+* Affiche la carte tirée et met le score à zéro
+*/
 function afficherDeck(response) {
     
     deckId=response.deck_id;
@@ -171,12 +204,14 @@ function afficherDeck(response) {
     majScore(0);
 
     tirerCarte();
-
-    var imageSecondaire=document.getElementById("carteSecondaire");
-
-    imageSecondaire.setAttribute("src","img/carteDos.png") ;
 }
 
+/**
+* Paramètre:
+*   response : réponse de l'api deckofcardsapi.com
+* Dans le cas d'un choix de purple affiche les deux cartes retournées par l'api
+* Sinon affiche la seule carte retournée par l'api
+*/
 function afficherNouvelleCarte(response){
     
     if(choix=="purple"){
@@ -214,11 +249,18 @@ function afficherNouvelleCarte(response){
     comparerValeurCartes();
 }
 
+/**
+* Mise à jour de l'affichage du score de la partie en cours
+*/
 function majScore(val){
     score=val;
     document.getElementById("pScore").innerHTML=score;
    
 }
+
+/**
+* Demande de confirmation pour quitter l'application lors de l'appui sur le bouton de retour de l'appareil
+*/
 function onBackKeyDown()
 {
     if (confirm("Voulez-vous quitter l'application ?")) 
@@ -241,8 +283,8 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
 
-onDeviceReady: function() {
-        //this.receivedEvent('deviceready');
+    onDeviceReady: function() {
+
         document.getElementById("plus").addEventListener("click", function() {traiterChoixJoueur("plus");}); 
         document.getElementById("moins").addEventListener("click", function() {traiterChoixJoueur("moins");});
 
@@ -258,21 +300,8 @@ onDeviceReady: function() {
         document.addEventListener("online", deckAleatoire, false);
 
         }, false);  
-        //document.getElementById("cartePrincipale").addEventListener("click", tirerCarte );
 
-},
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        /*var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
-        */
-    }
+    },
 };
 
 app.initialize();
